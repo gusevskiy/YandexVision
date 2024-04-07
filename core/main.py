@@ -1,19 +1,17 @@
 import os, glob
 import json
 from datetime import datetime, timedelta
-import core.response_IAM_token as response_IAM_token
-from core.settings import settings
+import response_IAM_token as response_IAM_token
+from settings import settings
 
 
-path_file_iamtoken = (os.path.join(os.getcwd()))
-
-
-def iam_token():
-        
+def iam_token(path_file_iamtoken):
+    # По умолчанию считаем что обновление требуется
+    token_update = False
     for file in os.listdir(path_file_iamtoken):
         if file.startswith("iam_token"):
             # открывает json file iam_token запрошенный ранее.
-            with open(path_file_iamtoken, "r") as file:
+            with open(f"{path_file_iamtoken}{file}", "r") as file:
                 iam_token = json.load(file)
             # дата и время окончания токена
             expiresAt = iam_token["expiresAt"]
@@ -22,13 +20,25 @@ def iam_token():
                 expiresAt[:26]+'Z', '%Y-%m-%dT%H:%M:%S.%fZ'
             )
             # если до окончания токена осталось меньше 2х часов.
-            if token_run_out_this_time - datetime.today() < timedelta(hours=10):
-                response_IAM_token.response_iam_token()
+            if token_run_out_this_time - datetime.today() < timedelta(hours=2):
+                token_update = response_IAM_token.response_iam_token()
                 break
-        else:
-            response_IAM_token.response_iam_token()
-            break
+    else:
+        token_update = response_IAM_token.response_iam_token()
+    return token_update
+
+
+def main():
+    
+    iam_token()
+    ...
+
+
+
 
 if __name__ == '__main__':
-    # iam_token()
-    print(path_file_iamtoken)
+    path_file_iamtoken = (os.path.join(os.getcwd(), "iam_token\\"))
+    # print(path_file_iamtoken)
+    # print(os.path.isfile(path_file_iamtoken))
+    print(iam_token(path_file_iamtoken))
+    # print(path_file_iamtoken)
