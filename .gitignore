@@ -162,5 +162,5 @@ cython_debug/
 # MyIgnore
 
 *.jpg
-*.txt
+# *.txt
 *.json
