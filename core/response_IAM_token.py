@@ -16,7 +16,7 @@ def delete_file_iam_token(iam_token_dir):
     Удаляет файл iam_token*.json
     """
     try:
-        file_iam_token = f"{iam_token_dir}\{os.listdir(iam_token_dir)[0]}"
+        file_iam_token = f"{iam_token_dir}\\{os.listdir(iam_token_dir)[0]}"
         if file_iam_token:
             os.remove(file_iam_token)
             logger.info(f'Deleted old file: file_iam_token {file_iam_token}')
@@ -45,7 +45,7 @@ def response_iam_token(iam_token_dir) -> bool:
         iam_token = iam_token_response.json()
         # сохраняем файл iam_token_текущая_дата.json
         file_name = f"iam_token {datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.json"
-        with open(f"{iam_token_dir}\{file_name}", "w") as json_file:
+        with open(f"{iam_token_dir}\\{file_name}", "w") as json_file:
             json.dump(iam_token, json_file, indent=4)
             logger.info(f"Created new file: {file_name}")
         return True
@@ -70,7 +70,7 @@ def check_iam_token(iam_token_dir) -> bool:
     for file in os.listdir(iam_token_dir):
         if file.startswith("iam_token"):
             # открывает json file iam_token котрый в папке iam_token.
-            with open(f"{iam_token_dir}\{file}", "r") as file:
+            with open(f"{iam_token_dir}\\{file}", "r") as file:
                 iam_token = json.load(file)
             # дата и время окончания токена
             expiresAt = iam_token["expiresAt"]
@@ -97,7 +97,8 @@ def check_iam_token(iam_token_dir) -> bool:
 
 if __name__ == '__main__':
     iam_token_dir = os.path.join(os.getcwd(), "iam_token")
+    # print(iam_token_dir)
     # print(f"{iam_token_dir}\{os.listdir(iam_token_dir)[0]}")
-    print(check_iam_token(iam_token_dir))
+    # print(check_iam_token(iam_token_dir))
     # delete_file_iam_token()
     # print(os.listdir(os.path.join(os.getcwd(), "iam_token\\"))[0]) 

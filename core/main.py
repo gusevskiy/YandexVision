@@ -16,7 +16,7 @@ wer = models[2]
 
 def get_iam_token(iam_token_dir):
     if check_iam_token(iam_token_dir):
-        file_iam_token = f"{iam_token_dir}\{os.listdir(iam_token_dir)[0]}"
+        file_iam_token = f"{iam_token_dir}\\{os.listdir(iam_token_dir)[0]}"
         with open(f"{file_iam_token}", "r", encoding="utf8") as file:
             iam_token = json.load(file)["iamToken"]
         # print(file_iam_token)
@@ -29,7 +29,6 @@ def create_image_in_base64(input_image_file):
     with open(input_image_file, "rb") as f:
         file_content = f.read()
         encoded_content = base64.b64encode(file_content).decode("utf-8")
-    # return encoded_content
     data = {
         "mimeType": "JPEG",
         "languageCodes": ["*"],
@@ -42,9 +41,6 @@ def create_image_in_base64(input_image_file):
 def main(image_path, iam_token_dir):
     iam_token = get_iam_token(iam_token_dir)
     json_data = create_image_in_base64(image_path)
-
-    # with open("output.json", "w") as json_file:
-    #     json_file.write(json_data)
 
     url = "https://ocr.api.cloud.yandex.net/ocr/v1/recognizeText"
 
